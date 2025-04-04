@@ -1,11 +1,10 @@
-import Pokemon from "../model/PokemonModel.js";  // Ensure correct import with `.js`
+import Pokemon from "../model/PokemonModel.js";  
 
-// ✅ Add a new Pokémon
 export const addPokemon = async (req, res) => {
   try {
     const { name, types, abilities } = req.body;
 
-    // Validate input
+    
     if (!name || !types || !abilities) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -22,7 +21,7 @@ export const addPokemon = async (req, res) => {
   }
 };
 
-// ✅ Delete a Pokémon by ID
+
 export const deletePokemon = async (req, res) => {
   try {
     const { id } = req.params;
@@ -38,7 +37,6 @@ export const deletePokemon = async (req, res) => {
   }
 };
 
-// ✅ Get all Pokémon
 export const getAllPokemon = async (req, res) => {
   try {
     const allPokemon = await Pokemon.find();
@@ -48,7 +46,7 @@ export const getAllPokemon = async (req, res) => {
   }
 };
 
-// ✅ Update a Pokémon by ID
+
 export const updatePokemon = async (req, res) => {
   try {
     const { id } = req.params;

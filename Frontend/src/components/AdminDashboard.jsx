@@ -16,7 +16,6 @@ import "./styles.css";
 const API_BASE_URL = "https://liseinfotechtask-2.onrender.com/api";
 
 const AdminDashboard = () => {
-  // State Variables
   const [pokemons, setPokemons] = useState([]);
   const [filteredPokemons, setFilteredPokemons] = useState([]);
   const [filterName, setFilterName] = useState("");
@@ -38,12 +37,11 @@ const AdminDashboard = () => {
     "Levitate",
   ];
 
-  // Fetch Pokémon from API
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/getAllPokemon`);
-        console.log("API Response:", response.data); // Debugging API response
+        console.log("API Response:", response.data); 
 
         const data = Array.isArray(response.data.pokemon)
           ? response.data.pokemon
@@ -59,7 +57,6 @@ const AdminDashboard = () => {
     fetchPokemon();
   }, []);
 
-  // Apply Filters
   useEffect(() => {
     let filtered = pokemons;
     if (filterName) {
@@ -75,7 +72,6 @@ const AdminDashboard = () => {
     setFilteredPokemons(filtered);
   }, [filterName, filterType, pokemons]);
 
-  // Handle Input Changes
   const handleInputChange = (e) => {
     setNewPokemon({ ...newPokemon, [e.target.name]: e.target.value });
   };
@@ -87,7 +83,6 @@ const AdminDashboard = () => {
     setNewPokemon((prev) => ({ ...prev, [field]: values }));
   };
 
-  // Add Pokémon
   const addPokemon = async () => {
     try {
       setBackendError(null);
@@ -104,7 +99,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // Delete Pokémon
   const deletePokemon = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/deletePokemon/${id}`);
@@ -117,10 +111,9 @@ const AdminDashboard = () => {
   return (
     <Container>
       <Typography variant="h4" align="center" sx={{ my: 3 }}>
-        ⚡ Admin Dashboard ⚡
+      Admin Dashboard
       </Typography>
 
-      {/* Filters */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -150,7 +143,6 @@ const AdminDashboard = () => {
         </Grid>
       </Grid>
 
-      {/* Pokémon Form */}
       <Card sx={{ p: 3, mb: 4 }}>
         <Typography variant="h5">Add a New Pokémon</Typography>
         <Grid container spacing={2} sx={{ mt: 1 }}>

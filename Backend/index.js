@@ -5,7 +5,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 
-// Import Controllers & Middleware
 import { adminLogin, adminLogOut } from "./src/controller/authController.js";
 import {
   addPokemon,
@@ -14,7 +13,6 @@ import {
   updatePokemon,
 } from "./src/controller/pokemonController.js";
 
-// Initialize Express App
 const app = express();
 const router = express.Router();
 
@@ -23,17 +21,15 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-// 🛠 CORS Configuration
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app", // Allow frontend origin
-    credentials: true, // Allow cookies/auth headers
+    origin: "https://lise-infotech-task-1mf7.vercel.app", 
+    credentials: true, 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// 🛠 Handle Preflight Requests (CORS OPTIONS)
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
@@ -47,16 +43,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// 🛠 Debugging: Log Request Headers (Remove in Production)
 app.use((req, res, next) => {
   console.log("Request Headers:", req.headers);
   next();
 });
 
-// 🔗 Database Connection
 configDB();
 
-// 🚀 API Routes (Prefixed with `/api`)
 router.get("/adminDashboard", (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
@@ -69,9 +62,7 @@ router.delete("/deletePokemon/:id", deletePokemon);
 router.get("/getAllPokemon", getAllPokemon);
 router.put("/updatePokemon/:id", updatePokemon);
 
-// 🛠 Use Router with `/api` Prefix
 app.use("/api", router);
 
-// 🚀 Start Server
 const PORT = process.env.PORT || 4500;
 app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

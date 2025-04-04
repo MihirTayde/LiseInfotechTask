@@ -9,7 +9,7 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // Clear any previous errors
+    setError(""); 
 
     try {
       const response = await axios.post(
@@ -22,7 +22,7 @@ const Login = ({ onLogin }) => {
 
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);
-        onLogin(); // Call function to change state to logged in
+        onLogin(); 
       }
     } catch (error) {
       console.error("Login Error:", error);
