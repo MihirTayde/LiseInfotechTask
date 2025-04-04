@@ -21,12 +21,13 @@ app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app", // Corrected: Removed trailing slash
-    credentials: true, // Allows cookies and authentication headers
-    methods: "GET,POST,PUT,DELETE", // Allowed methods
-    allowedHeaders: "Content-Type,Authorization", // Allowed headers
+    origin: "https://lise-infotech-task-1mf7.vercel.app", // ✅ Corrected (No trailing slash)
+    credentials: true, // ✅ Allow cookies & authorization headers
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
   })
 );
+
 app.options("*", cors()); // Handle preflight requests globally
 
 // Database Connection
