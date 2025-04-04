@@ -30,6 +30,5 @@ npm run dev
 admin pannel username : MeAdmin || password: MeAdmin
 
 
-![Screenshot (31)](https://github.com/user-attachments/assets/d40442e1-5de4-456f-aea6-e42a98cf58f9)
-![Screenshot (32)](https://github.com/user-attachments/assets/245e25a4-8ebd-4e6b-8874-d1808fdbdde3)
+
 
