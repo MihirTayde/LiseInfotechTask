@@ -21,7 +21,7 @@ app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://lise-infotech-task-1mf7.vercel.app"], 
+    origin: ["https://lise-infotech-task-1mf7.vercel.app/"],
     credentials: true, // Allow credentials like cookies
   })
 );
@@ -31,8 +31,6 @@ app.use(
     credentials: true,
   })
 );
-
-
 
 // Database Connection
 configDB();
