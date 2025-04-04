@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
 import {
@@ -9,7 +9,7 @@ import {
   Card,
   CardContent,
   Grid,
-  Container
+  Container,
 } from "@mui/material";
 import "./styles.css";
 
@@ -30,7 +30,13 @@ const AdminDashboard = () => {
   });
 
   const availableTypes = ["Fire", "Water", "Air"];
-  const availableAbilities = ["Blaze", "Torrent", "Intimidate", "Swift Swim", "Levitate"];
+  const availableAbilities = [
+    "Blaze",
+    "Torrent",
+    "Intimidate",
+    "Swift Swim",
+    "Levitate",
+  ];
 
   // Fetch Pokémon from API
   useEffect(() => {
@@ -39,18 +45,22 @@ const AdminDashboard = () => {
         const response = await axios.get(`${API_BASE_URL}/getAllPokemon`);
         console.log("API Response:", response.data); // Debugging API response
 
-        const data = Array.isArray(response.data) ? response.data : [];
+        const data = Array.isArray(response.data.pokemon)
+          ? response.data.pokemon
+          : [];
+
         setPokemons(data);
         setFilteredPokemons(data);
       } catch (error) {
         console.error("Error fetching Pokémon:", error);
+        setBackendError("Failed to fetch Pokémon. Please try again later.");
       }
     };
     fetchPokemon();
   }, []);
 
   // Apply Filters
-  const applyFilters = useCallback(() => {
+  useEffect(() => {
     let filtered = pokemons;
     if (filterName) {
       filtered = filtered.filter((pokemon) =>
@@ -58,14 +68,12 @@ const AdminDashboard = () => {
       );
     }
     if (filterType) {
-      filtered = filtered.filter((pokemon) => pokemon.types.includes(filterType));
+      filtered = filtered.filter((pokemon) =>
+        pokemon.types?.includes(filterType)
+      );
     }
     setFilteredPokemons(filtered);
   }, [filterName, filterType, pokemons]);
-
-  useEffect(() => {
-    applyFilters();
-  }, [applyFilters]);
 
   // Handle Input Changes
   const handleInputChange = (e) => {
@@ -83,11 +91,16 @@ const AdminDashboard = () => {
   const addPokemon = async () => {
     try {
       setBackendError(null);
-      const response = await axios.post(`${API_BASE_URL}/addPokemon`, newPokemon);
+      const response = await axios.post(
+        `${API_BASE_URL}/addPokemon`,
+        newPokemon
+      );
       setPokemons([...pokemons, response.data]);
       setNewPokemon({ name: "", types: [], abilities: [] });
     } catch (error) {
-      setBackendError(error.response?.data?.message || "Failed to add Pokémon.");
+      setBackendError(
+        error.response?.data?.message || "Failed to add Pokémon."
+      );
     }
   };
 
@@ -118,7 +131,7 @@ const AdminDashboard = () => {
             onChange={(e) => setFilterName(e.target.value)}
           />
         </Grid>
-        <Grid item xs={18} sm={6}>
+        <Grid item xs={12} sm={6}>
           <TextField
             fullWidth
             select
@@ -155,23 +168,44 @@ const AdminDashboard = () => {
           <Grid item xs={12} sm={6}>
             <Select
               isMulti
-              options={availableTypes.map((type) => ({ value: type, label: type }))}
-              onChange={(selected) => handleMultiSelectChange(selected, "types")}
-              value={newPokemon.types.map((type) => ({ value: type, label: type }))}
+              options={availableTypes.map((type) => ({
+                value: type,
+                label: type,
+              }))}
+              onChange={(selected) =>
+                handleMultiSelectChange(selected, "types")
+              }
+              value={newPokemon.types.map((type) => ({
+                value: type,
+                label: type,
+              }))}
             />
           </Grid>
 
           <Grid item xs={12}>
             <Select
               isMulti
-              options={availableAbilities.map((ability) => ({ value: ability, label: ability }))}
-              onChange={(selected) => handleMultiSelectChange(selected, "abilities")}
-              value={newPokemon.abilities.map((ability) => ({ value: ability, label: ability }))}
+              options={availableAbilities.map((ability) => ({
+                value: ability,
+                label: ability,
+              }))}
+              onChange={(selected) =>
+                handleMultiSelectChange(selected, "abilities")
+              }
+              value={newPokemon.abilities.map((ability) => ({
+                value: ability,
+                label: ability,
+              }))}
             />
           </Grid>
         </Grid>
 
-        <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={addPokemon}>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
+          onClick={addPokemon}
+        >
           Add Pokémon
         </Button>
         {backendError && (
@@ -182,32 +216,38 @@ const AdminDashboard = () => {
       </Card>
 
       {/* Pokémon List */}
-      <Typography variant="h5">Pokémon List</Typography>
       <Grid container spacing={2}>
-        {Array.isArray(filteredPokemons) &&
-          filteredPokemons.map((pokemon) => (
-            <Grid item xs={12} sm={6} md={4} key={pokemon._id}>
-              <Card sx={{ p: 2 }}>
-                <CardContent>
-                  <Typography variant="h6">{pokemon.name}</Typography>
-                  <Typography variant="body2">
-                    <strong>Types:</strong> {pokemon.types.join(", ")}
-                  </Typography>
-                  <Typography variant="body2">
-                    <strong>Abilities:</strong> {pokemon.abilities.join(", ")}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    sx={{ mt: 1 }}
-                    onClick={() => deletePokemon(pokemon._id)}
-                  >
-                    Delete
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+        {filteredPokemons.map((pokemon) => (
+          <Grid item xs={12} sm={6} md={4} key={pokemon._id}>
+            <Card sx={{ p: 2 }}>
+              <CardContent>
+                <Typography variant="h6">
+                  {pokemon.name || "Unknown Name"}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Types:</strong>{" "}
+                  {Array.isArray(pokemon.types) && pokemon.types.length > 0
+                    ? pokemon.types.join(", ")
+                    : "N/A"}
+                </Typography>
+                <Typography variant="body2">
+                  <strong>Abilities:</strong>{" "}
+                  {Array.isArray(pokemon.abilities) && pokemon.abilities.length > 0
+                    ? pokemon.abilities.join(", ")
+                    : "N/A"}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="error"
+                  sx={{ mt: 1 }}
+                  onClick={() => deletePokemon(pokemon._id)}
+                >
+                  Delete
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Container>
   );
