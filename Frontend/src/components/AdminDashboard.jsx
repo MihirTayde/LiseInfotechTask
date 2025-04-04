@@ -1,28 +1,19 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import "./styles.css";
-import Select from "react-select"; // Import the react-select component
+import Select from "react-select";
 
 const API_BASE_URL = "https://liseinfotechtask-2.onrender.com/api";
 
 const AdminDashboard = () => {
   const [pokemons, setPokemons] = useState([]);
   const [filteredPokemons, setFilteredPokemons] = useState([]);
-  const [newPokemon, setNewPokemon] = useState({
-    name: "",
-    types: [], // Changed to array for multiple select
-    abilities: [], // Changed to array for multiple select
-  });
+  const [newPokemon, setNewPokemon] = useState({ name: "", types: [], abilities: [] });
   const [filterName, setFilterName] = useState("");
   const [filterType, setFilterType] = useState("");
+
   const availableTypes = ["Fire", "Water", "Air"];
-  const availableAbilities = [
-    "Blaze",
-    "Torrent",
-    "Intimidate",
-    "Swift Swim",
-    "Levitate",
-  ]; // Example abilities
+  const availableAbilities = ["Blaze", "Torrent", "Intimidate", "Swift Swim", "Levitate"];
 
   useEffect(() => {
     fetchPokemon();
@@ -46,9 +37,7 @@ const AdminDashboard = () => {
       );
     }
     if (filterType) {
-      filtered = filtered.filter((pokemon) =>
-        pokemon.types.includes(filterType)
-      );
+      filtered = filtered.filter((pokemon) => pokemon.types.includes(filterType));
     }
     setFilteredPokemons(filtered);
   }, [filterName, filterType, pokemons]);
@@ -73,11 +62,7 @@ const AdminDashboard = () => {
 
   const addPokemon = async () => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/addPokemon`, {
-        name: newPokemon.name,
-        types: newPokemon.types,
-        abilities: newPokemon.abilities,
-      });
+      const response = await axios.post(`${API_BASE_URL}/api/addPokemon`, newPokemon);
       setPokemons([...pokemons, response.data]);
       setNewPokemon({ name: "", types: [], abilities: [] });
     } catch (error) {
@@ -96,7 +81,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="dashboard">
-      <h1>⚡ Welcome, Admin! ⚡</h1>
+      <h1>⚡ Admin Dashboard ⚡</h1>
 
       <div className="filters">
         <input
@@ -104,16 +89,12 @@ const AdminDashboard = () => {
           placeholder="Filter by Name"
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
+          className="input-field"
         />
-        <select
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-        >
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="select-field">
           <option value="">All Types</option>
           {availableTypes.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
+            <option key={type} value={type}>{type}</option>
           ))}
         </select>
       </div>
@@ -123,58 +104,36 @@ const AdminDashboard = () => {
           type="text"
           placeholder="Name"
           value={newPokemon.name}
-          onChange={(e) =>
-            setNewPokemon({ ...newPokemon, name: e.target.value })
-          }
+          onChange={(e) => setNewPokemon({ ...newPokemon, name: e.target.value })}
+          className="input-field"
         />
-        <div className="select-container">
-          <label htmlFor="types-select">Types:</label>
-          <Select
-            id="types-select"
-            isMulti
-            name="types"
-            options={availableTypes.map((type) => ({
-              value: type,
-              label: type,
-            }))}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            onChange={handleTypeChange}
-            value={newPokemon.types.map((type) => ({
-              value: type,
-              label: type,
-            }))}
-          />
-        </div>
-        <div className="select-container">
-          <label htmlFor="abilities-select">Abilities:</label>
-          <Select
-            id="abilities-select"
-            isMulti
-            name="abilities"
-            options={availableAbilities.map((ability) => ({
-              value: ability,
-              label: ability,
-            }))}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            onChange={handleAbilityChange}
-            value={newPokemon.abilities.map((ability) => ({
-              value: ability,
-              label: ability,
-            }))}
-          />
-        </div>
-        <button onClick={addPokemon}>Add Pokémon</button>
+        <Select
+          isMulti
+          name="types"
+          options={availableTypes.map((type) => ({ value: type, label: type }))}
+          className="select-box"
+          onChange={handleTypeChange}
+          value={newPokemon.types.map((type) => ({ value: type, label: type }))}
+        />
+        <Select
+          isMulti
+          name="abilities"
+          options={availableAbilities.map((ability) => ({ value: ability, label: ability }))}
+          className="select-box"
+          onChange={handleAbilityChange}
+          value={newPokemon.abilities.map((ability) => ({ value: ability, label: ability }))}
+        />
+        <button onClick={addPokemon} className="add-btn">Add Pokémon</button>
       </div>
 
       <h2>Pokémon List</h2>
-      <ul>
+      <ul className="pokemon-list">
         {filteredPokemons.map((pokemon) => (
-          <li key={pokemon._id}>
-            <strong>{pokemon.name}</strong> | Types: {pokemon.types.join(", ")}{" "}
-            | Abilities: {pokemon.abilities.join(", ")}
-            <button onClick={() => deletePokemon(pokemon._id)}>Delete</button>
+          <li key={pokemon._id} className="pokemon-card">
+            <strong>{pokemon.name}</strong>
+            <p>Types: {pokemon.types.join(", ")}</p>
+            <p>Abilities: {pokemon.abilities.join(", ")}</p>
+            <button onClick={() => deletePokemon(pokemon._id)} className="delete-btn">Delete</button>
           </li>
         ))}
       </ul>

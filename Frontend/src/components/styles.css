@@ -1,53 +1,85 @@
 body {
-    font-family: "Comic Sans MS", cursive, sans-serif;
-    background-color: #ffcc00; /* Pikachu Yellow */
-    text-align: center;
-    margin: 0;
-  }
-  
-  .login-container {
-    background: #222;
-    color: #fff;
-    padding: 30px;
-    width: 300px;
-    margin: 100px auto;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #ffcc00;
-  }
-  
-  .pikachu-title {
-    color: #ffcc00;
-    text-shadow: 2px 2px 5px black;
-  }
-  
-  input {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    outline: none;
-  }
-  
-  button {
-    background: #ffcc00;
-    color: black;
-    font-size: 18px;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  button:hover {
-    background: #ffaa00;
-  }
-  
-  .dashboard {
-    color: black;
-    font-size: 22px;
-    padding: 50px;
-  }
-  
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-field, .select-field {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.pokemon-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.select-box {
+  width: 100%;
+}
+
+.add-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  background-color: #0056b3;
+}
+
+.pokemon-list {
+  list-style: none;
+  padding: 0;
+}
+
+.pokemon-card {
+  background: #fff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: darkred;
+}
