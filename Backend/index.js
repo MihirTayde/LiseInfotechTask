@@ -7,7 +7,6 @@ import bodyParser from "body-parser";
 
 // Import Controllers & Middleware
 import { adminLogin, adminLogOut } from "./src/controller/authController.js";
-import { isAdmin } from "./src/middleware/isAdmin.js";
 import {
   addPokemon,
   deletePokemon,
@@ -58,18 +57,17 @@ app.use((req, res, next) => {
 configDB();
 
 // 🚀 API Routes (Prefixed with `/api`)
-router.get("/adminDashboard", isAdmin, (req, res) => {
+router.get("/adminDashboard", (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
-
 
 router.post("/adminLogin", adminLogin);
 router.post("/adminLogout", adminLogOut);
 
-router.post("/addPokemon", isAdmin, addPokemon);
-router.delete("/deletePokemon/:id", isAdmin, deletePokemon);
-router.get("/getAllPokemon", isAdmin, getAllPokemon);
-router.put("/updatePokemon/:id", isAdmin, updatePokemon);
+router.post("/addPokemon", addPokemon);
+router.delete("/deletePokemon/:id", deletePokemon);
+router.get("/getAllPokemon", getAllPokemon);
+router.put("/updatePokemon/:id", updatePokemon);
 
 // 🛠 Use Router with `/api` Prefix
 app.use("/api", router);
