@@ -19,7 +19,7 @@ const router = express.Router();
 // Middleware
 app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
-
+app.use(bodyParser)
 app.use(
   cors({
     origin: "https://lise-infotech-task-1mf7.vercel.app",
