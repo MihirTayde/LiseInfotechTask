@@ -40,7 +40,6 @@ const AdminDashboard = () => {
     }
   };
 
-
   const updatePokemon = async (id, updatedData) => {
     try {
       await axios.put(`${API_BASE_URL}/updatePokemon/${id}`, updatedData);
@@ -68,19 +67,25 @@ const AdminDashboard = () => {
           type="text"
           placeholder="Name"
           value={newPokemon.name}
-          onChange={(e) => setNewPokemon({ ...newPokemon, name: e.target.value })}
+          onChange={(e) =>
+            setNewPokemon({ ...newPokemon, name: e.target.value })
+          }
         />
         <input
           type="text"
           placeholder="Types (comma-separated)"
           value={newPokemon.types}
-          onChange={(e) => setNewPokemon({ ...newPokemon, types: e.target.value })}
+          onChange={(e) =>
+            setNewPokemon({ ...newPokemon, types: e.target.value })
+          }
         />
         <input
           type="text"
           placeholder="Abilities (comma-separated)"
           value={newPokemon.abilities}
-          onChange={(e) => setNewPokemon({ ...newPokemon, abilities: e.target.value })}
+          onChange={(e) =>
+            setNewPokemon({ ...newPokemon, abilities: e.target.value })
+          }
         />
         <button onClick={addPokemon}>Add Pokémon</button>
       </div>
@@ -90,8 +95,16 @@ const AdminDashboard = () => {
         <ul>
           {pokemons.map((pokemon) => (
             <li key={pokemon._id}>
-              <strong>{pokemon.name}</strong> | Types: {pokemon.types.join(", ")} | Abilities: {pokemon.abilities.join(", ")}
-              <button onClick={() => updatePokemon(pokemon._id, { name: "Updated Name" })}>Update</button>
+              <strong>{pokemon.name}</strong> | Types:{" "}
+              {pokemon.types.join(", ")} | Abilities:{" "}
+              {pokemon.abilities.join(", ")}
+              <button
+                onClick={() =>
+                  updatePokemon(pokemon._id, { name: "Updated Name" })
+                }
+              >
+                Update
+              </button>
               <button onClick={() => deletePokemon(pokemon._id)}>Delete</button>
             </li>
           ))}
