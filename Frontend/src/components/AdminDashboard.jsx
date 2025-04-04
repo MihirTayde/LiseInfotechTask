@@ -21,7 +21,7 @@ const AdminDashboard = () => {
 
   const fetchPokemon = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/getAllPokemon`);
+      const response = await axios.get(`${API_BASE_URL}/getAllPokemon`);
       setPokemons(response.data);
       setFilteredPokemons(response.data);
     } catch (error) {
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
 
   const addPokemon = async () => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/addPokemon`, newPokemon);
+      const response = await axios.post(`${API_BASE_URL}/addPokemon`, newPokemon);
       setPokemons([...pokemons, response.data]);
       setNewPokemon({ name: "", types: [], abilities: [] });
     } catch (error) {
@@ -72,7 +72,7 @@ const AdminDashboard = () => {
 
   const deletePokemon = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/deletePokemon/${id}`);
+      await axios.delete(`${API_BASE_URL}/deletePokemon/${id}`);
       setPokemons(pokemons.filter((pokemon) => pokemon._id !== id));
     } catch (error) {
       console.error("Error deleting Pokémon:", error);
