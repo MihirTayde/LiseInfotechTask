@@ -13,7 +13,7 @@ export const adminLogOut = async (req, res) => {
   }
 };
 
-export const adminLogin = async (req, res) => {
+export const adminLogin = async (req, res, next) => {
   try {
     const { userName, password } = req.body;
 
