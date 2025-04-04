@@ -7,7 +7,6 @@ const App = () => {
 
   return (
     <div>
-      <AdminDashboard></AdminDashboard>
       {isLoggedIn ? (
         <AdminDashboard />
       ) : (
