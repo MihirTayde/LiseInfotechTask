@@ -19,10 +19,21 @@ const router = express.Router();
 // Middleware
 app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
+const allowedOrigins = [
+  "https://lise-infotech-task-1mf7.vercel.app",
+  // Add other allowed origins here
+];
+
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app", // ✅ Corrected (No trailing slash)
-    credentials: true, // ✅ Allow cookies & authorization headers
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
   })
