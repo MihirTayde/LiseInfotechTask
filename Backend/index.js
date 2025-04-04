@@ -14,7 +14,7 @@ app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://lise-infotech-task-1mf7.vercel.app/",
     credentials: true, // Allow credentials like cookies
   })
 );
@@ -49,7 +49,9 @@ router.post("/addPokemon", isAdmin, (req, res) => {
   }
   const newPokemon = { id: pokemons.length + 1, name, type, level };
   pokemons.push(newPokemon);
-  res.status(201).json({ message: "Pokémon added successfully", pokemon: newPokemon });
+  res
+    .status(201)
+    .json({ message: "Pokémon added successfully", pokemon: newPokemon });
 });
 
 // Read Pokémon (List All)
@@ -68,7 +70,10 @@ router.put("/editPokemon/:id", isAdmin, (req, res) => {
   }
 
   pokemons[pokemonIndex] = { ...pokemons[pokemonIndex], name, type, level };
-  res.json({ message: "Pokémon updated successfully", pokemon: pokemons[pokemonIndex] });
+  res.json({
+    message: "Pokémon updated successfully",
+    pokemon: pokemons[pokemonIndex],
+  });
 });
 
 // Delete Pokémon
