@@ -63,6 +63,7 @@ router.get("/adminDashboard", isAdmin, (req, res) => {
 });
 router.get("/", (req, res) => {
   res.json({ message: "Server is up and runnning" });
+  res.send("Server is up and runnning");
 });
 
 router.post("/adminLogin", adminLogin);
