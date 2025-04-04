@@ -36,7 +36,10 @@ app.use(
 
 // 🛠 Handle Preflight Requests (CORS OPTIONS)
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://lise-infotech-task-1mf7.vercel.app");
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://lise-infotech-task-1mf7.vercel.app"
+  );
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   if (req.method === "OPTIONS") {
@@ -58,6 +61,10 @@ configDB();
 router.get("/adminDashboard", isAdmin, (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
+router.get("/", (req, res) => {
+  res.json({ message: "Server is up and runnning" });
+});
+
 router.post("/adminLogin", adminLogin);
 router.post("/adminLogout", adminLogOut);
 
