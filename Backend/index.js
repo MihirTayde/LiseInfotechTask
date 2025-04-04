@@ -22,20 +22,13 @@ app.use(
 // Database Connection
 configDB();
 
-// Root Route
-app.get("/", (req, res) => {
-  try {
-    res.send("Hi there");
-  } catch (error) {
-    console.log(error);
-  }
-});
+
 
 // Admin Routes
 router.get("/adminDashboard", isAdmin, (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
-router.post("/adminLogin", adminLogin);
+router.post("/", adminLogin);
 router.post("/adminLogout", adminLogOut);
 
 // Pokémon Data Storage (Temporary - Replace with Database)
