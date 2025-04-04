@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 
+
 export const adminLogOut = async (req, res) => {
   try {
     res
@@ -14,10 +15,10 @@ export const adminLogOut = async (req, res) => {
 
 export const adminLogin = async (req, res) => {
   try {
-    const { adminUsername, password } = req.body;
+    const { userName, password } = req.body;
 
     if (
-      adminUsername === process.env.ADMIN_USERNAME &&
+      userName === process.env.ADMIN_USERNAME &&
       password === process.env.ADMIN_PASSWORD
     ) {
       const tokenData = { role: "admin" };
@@ -28,11 +29,11 @@ export const adminLogin = async (req, res) => {
 
       return res
         .status(200)
-        .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+        .cookie("token", token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }) // Requires cookie-parser middleware
         .json({
           message: "Admin login successful",
           user: {
-            username: adminUsername,
+            username: userName, // Fixed variable name
             role: "admin",
           },
           token,

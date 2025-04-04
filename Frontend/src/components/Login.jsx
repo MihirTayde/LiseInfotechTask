@@ -12,10 +12,13 @@ const Login = ({ onLogin }) => {
     setError(""); // Clear any previous errors
 
     try {
-      const response = await axios.post("http://localhost:5000/api/admin/login", {
-        userName,
-        password,
-      });
+      const response = await axios.post(
+        "https://lise-infotech-task.vercel.app/adminLogin",
+        {
+          userName,
+          password,
+        }
+      );
 
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);
