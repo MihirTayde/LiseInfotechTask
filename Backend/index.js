@@ -61,9 +61,7 @@ configDB();
 router.get("/adminDashboard", isAdmin, (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
-router.get("/", (req, res) => {
-  res.send("Server is up and runnning");
-});
+
 
 router.post("/adminLogin", adminLogin);
 router.post("/adminLogout", adminLogOut);
