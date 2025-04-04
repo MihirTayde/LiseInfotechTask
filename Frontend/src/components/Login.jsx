@@ -13,7 +13,7 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await axios.post(
-        "https://lise-infotech-task.vercel.app/adminLogin",
+        "https://lise-infotech-task.vercel.app/",
         {
           userName,
           password,
