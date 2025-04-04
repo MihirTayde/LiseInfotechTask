@@ -1,6 +1,16 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Select from "react-select";
+import {
+  TextField,
+  MenuItem,
+  Button,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  Container
+} from "@mui/material";
 import "./styles.css";
 
 const API_BASE_URL = "https://liseinfotechtask-2.onrender.com/api";
@@ -13,7 +23,11 @@ const AdminDashboard = () => {
   const [filterType, setFilterType] = useState("");
   const [backendError, setBackendError] = useState(null);
 
-  const [newPokemon, setNewPokemon] = useState({ name: "", types: [], abilities: [] });
+  const [newPokemon, setNewPokemon] = useState({
+    name: "",
+    types: [],
+    abilities: [],
+  });
 
   const availableTypes = ["Fire", "Water", "Air"];
   const availableAbilities = ["Blaze", "Torrent", "Intimidate", "Swift Swim", "Levitate"];
@@ -23,8 +37,11 @@ const AdminDashboard = () => {
     const fetchPokemon = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/getAllPokemon`);
-        setPokemons(response.data);
-        setFilteredPokemons(response.data);
+        console.log("API Response:", response.data); // Debugging API response
+
+        const data = Array.isArray(response.data) ? response.data : [];
+        setPokemons(data);
+        setFilteredPokemons(data);
       } catch (error) {
         console.error("Error fetching Pokémon:", error);
       }
@@ -36,12 +53,12 @@ const AdminDashboard = () => {
   const applyFilters = useCallback(() => {
     let filtered = pokemons;
     if (filterName) {
-      filtered = filtered.filter(pokemon =>
+      filtered = filtered.filter((pokemon) =>
         pokemon.name?.toLowerCase().includes(filterName.toLowerCase())
       );
     }
     if (filterType) {
-      filtered = filtered.filter(pokemon => pokemon.types.includes(filterType));
+      filtered = filtered.filter((pokemon) => pokemon.types.includes(filterType));
     }
     setFilteredPokemons(filtered);
   }, [filterName, filterType, pokemons]);
@@ -56,10 +73,10 @@ const AdminDashboard = () => {
   };
 
   const handleMultiSelectChange = (selectedOptions, field) => {
-    setNewPokemon({
-      ...newPokemon,
-      [field]: selectedOptions ? selectedOptions.map(option => option.value) : [],
-    });
+    const values = Array.isArray(selectedOptions)
+      ? selectedOptions.map((option) => option.value)
+      : [];
+    setNewPokemon((prev) => ({ ...prev, [field]: values }));
   };
 
   // Add Pokémon
@@ -78,81 +95,121 @@ const AdminDashboard = () => {
   const deletePokemon = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/deletePokemon/${id}`);
-      setPokemons(pokemons.filter(pokemon => pokemon._id !== id));
+      setPokemons(pokemons.filter((pokemon) => pokemon._id !== id));
     } catch (error) {
       console.error("Error deleting Pokémon:", error);
     }
   };
 
   return (
-    <div className="dashboard">
-      <h1>⚡ Admin Dashboard ⚡</h1>
+    <Container>
+      <Typography variant="h4" align="center" sx={{ my: 3 }}>
+        ⚡ Admin Dashboard ⚡
+      </Typography>
 
       {/* Filters */}
-      <div className="filters">
-        <input
-          type="text"
-          name="filterName"
-          placeholder="Filter by Name"
-          value={filterName}
-          onChange={(e) => setFilterName(e.target.value)}
-          className="input-field"
-        />
-        <select
-          name="filterType"
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-          className="select-field"
-        >
-          <option value="">All Types</option>
-          {availableTypes.map(type => <option key={type} value={type}>{type}</option>)}
-        </select>
-      </div>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label="Filter by Name"
+            variant="outlined"
+            value={filterName}
+            onChange={(e) => setFilterName(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={18} sm={6}>
+          <TextField
+            fullWidth
+            select
+            label="Filter by Type"
+            variant="outlined"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <MenuItem value="">All Types</MenuItem>
+            {availableTypes.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+      </Grid>
 
       {/* Pokémon Form */}
-      <div className="pokemon-form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={newPokemon.name}
-          onChange={handleInputChange}
-          className="input-field"
-        />
+      <Card sx={{ p: 3, mb: 4 }}>
+        <Typography variant="h5">Add a New Pokémon</Typography>
+        <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              label="Name"
+              variant="outlined"
+              name="name"
+              value={newPokemon.name}
+              onChange={handleInputChange}
+            />
+          </Grid>
 
-        <Select
-          isMulti
-          options={availableTypes.map(type => ({ value: type, label: type }))}
-          className="select-box"
-          onChange={(selected) => handleMultiSelectChange(selected, "types")}
-          value={newPokemon.types.map(type => ({ value: type, label: type }))}
-        />
+          <Grid item xs={12} sm={6}>
+            <Select
+              isMulti
+              options={availableTypes.map((type) => ({ value: type, label: type }))}
+              onChange={(selected) => handleMultiSelectChange(selected, "types")}
+              value={newPokemon.types.map((type) => ({ value: type, label: type }))}
+            />
+          </Grid>
 
-        <Select
-          isMulti
-          options={availableAbilities.map(ability => ({ value: ability, label: ability }))}
-          className="select-box"
-          onChange={(selected) => handleMultiSelectChange(selected, "abilities")}
-          value={newPokemon.abilities.map(ability => ({ value: ability, label: ability }))}
-        />
+          <Grid item xs={12}>
+            <Select
+              isMulti
+              options={availableAbilities.map((ability) => ({ value: ability, label: ability }))}
+              onChange={(selected) => handleMultiSelectChange(selected, "abilities")}
+              value={newPokemon.abilities.map((ability) => ({ value: ability, label: ability }))}
+            />
+          </Grid>
+        </Grid>
 
-        <button onClick={addPokemon} className="add-btn">Add Pokémon</button>
-        {backendError && <p className="error-message">Error: {backendError}</p>}
-      </div>
+        <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={addPokemon}>
+          Add Pokémon
+        </Button>
+        {backendError && (
+          <Typography color="error" sx={{ mt: 1 }}>
+            Error: {backendError}
+          </Typography>
+        )}
+      </Card>
 
       {/* Pokémon List */}
-      <h2>Pokémon List</h2>
-      <ul className="pokemon-list">
-        {filteredPokemons.map(pokemon => (
-          <li key={pokemon._id} className="pokemon-card">
-            <strong>{pokemon.name}</strong>
-            <p>Types: {pokemon.types.join(", ")}</p>
-            <p>Abilities: {pokemon.abilities.join(", ")}</p>
-            <button onClick={() => deletePokemon(pokemon._id)} className="delete-btn">Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+      <Typography variant="h5">Pokémon List</Typography>
+      <Grid container spacing={2}>
+        {Array.isArray(filteredPokemons) &&
+          filteredPokemons.map((pokemon) => (
+            <Grid item xs={12} sm={6} md={4} key={pokemon._id}>
+              <Card sx={{ p: 2 }}>
+                <CardContent>
+                  <Typography variant="h6">{pokemon.name}</Typography>
+                  <Typography variant="body2">
+                    <strong>Types:</strong> {pokemon.types.join(", ")}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Abilities:</strong> {pokemon.abilities.join(", ")}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ mt: 1 }}
+                    onClick={() => deletePokemon(pokemon._id)}
+                  >
+                    Delete
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
   );
 };
 
