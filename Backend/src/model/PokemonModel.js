@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const pokemonSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  types: [String],
-  abilities: [String],
+  types: { type: [String], required: true },
+  abilities: { type: [String], required: true },
 });
 
-module.exports = mongoose.model("Pokemon", pokemonSchema);
+export default mongoose.model("Pokemon", pokemonSchema);

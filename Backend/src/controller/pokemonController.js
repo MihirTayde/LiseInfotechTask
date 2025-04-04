@@ -1,19 +1,22 @@
-
-
+import Pokemon from "../model/PokemonModel.js";  // Ensure correct import with `.js`
 
 // ✅ Add a new Pokémon
 export const addPokemon = async (req, res) => {
   try {
     const { name, types, abilities } = req.body;
 
+    // Validate input
     if (!name || !types || !abilities) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+    if (!Array.isArray(types) || !Array.isArray(abilities)) {
+      return res.status(400).json({ message: "Types and Abilities must be arrays" });
     }
 
     const newPokemon = new Pokemon({ name, types, abilities });
     await newPokemon.save();
 
-    res.status(201).json({ message: "Pokemon added successfully", newPokemon });
+    res.status(201).json({ message: "Pokémon added successfully", pokemon: newPokemon });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -25,12 +28,11 @@ export const deletePokemon = async (req, res) => {
     const { id } = req.params;
 
     const deletedPokemon = await Pokemon.findByIdAndDelete(id);
-
     if (!deletedPokemon) {
-      return res.status(404).json({ message: "Pokemon not found" });
+      return res.status(404).json({ message: "Pokémon not found" });
     }
 
-    res.status(200).json({ message: "Pokemon deleted successfully" });
+    res.status(200).json({ message: "Pokémon deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -40,7 +42,7 @@ export const deletePokemon = async (req, res) => {
 export const getAllPokemon = async (req, res) => {
   try {
     const allPokemon = await Pokemon.find();
-    res.status(200).json(allPokemon);
+    res.status(200).json({ message: "Pokémon list retrieved", pokemon: allPokemon });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -52,6 +54,14 @@ export const updatePokemon = async (req, res) => {
     const { id } = req.params;
     const { name, types, abilities } = req.body;
 
+    // Validate optional fields
+    if (types && !Array.isArray(types)) {
+      return res.status(400).json({ message: "Types must be an array" });
+    }
+    if (abilities && !Array.isArray(abilities)) {
+      return res.status(400).json({ message: "Abilities must be an array" });
+    }
+
     const updatedPokemon = await Pokemon.findByIdAndUpdate(
       id,
       { name, types, abilities },
@@ -59,12 +69,10 @@ export const updatePokemon = async (req, res) => {
     );
 
     if (!updatedPokemon) {
-      return res.status(404).json({ message: "Pokemon not found" });
+      return res.status(404).json({ message: "Pokémon not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Pokemon updated successfully", updatedPokemon });
+    res.status(200).json({ message: "Pokémon updated successfully", pokemon: updatedPokemon });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
