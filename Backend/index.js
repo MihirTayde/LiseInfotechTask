@@ -29,6 +29,11 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  console.log("Request Headers:", req.headers);
+  next();
+});
+
 app.options("*", cors()); // Handle preflight requests globally
 
 // Database Connection
