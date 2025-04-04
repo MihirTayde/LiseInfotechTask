@@ -13,7 +13,7 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await axios.post(
-        "https://liseinfotechtask-2.onrender.com/adminLogin", // Corrected login endpoint
+        "https://liseinfotechtask-2.onrender.com/api/adminLogin",
         {
           userName,
           password,
