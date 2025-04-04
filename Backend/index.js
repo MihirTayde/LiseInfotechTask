@@ -12,6 +12,10 @@ import {
   getAllPokemon,
   updatePokemon,
 } from "./src/controller/pokemonController.js";
+import {
+  playerLogin,
+  playerRegister,
+} from "./src/controller/playerController.js";
 
 const app = express();
 const router = express.Router();
@@ -23,8 +27,8 @@ app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app", 
-    credentials: true, 
+    origin: "https://lise-infotech-task-1mf7.vercel.app",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -56,6 +60,10 @@ router.get("/adminDashboard", (req, res) => {
 
 router.post("/adminLogin", adminLogin);
 router.post("/adminLogout", adminLogOut);
+router.post("/playerLogin", playerLogin);
+router.post("/playerRegister", playerRegister);
+
+
 
 router.post("/addPokemon", addPokemon);
 router.delete("/deletePokemon/:id", deletePokemon);
