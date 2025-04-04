@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app/",
+    origin: "https://lise-infotech-task-1mf7.vercel.app",
     credentials: true,
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
