@@ -5,6 +5,13 @@ import { adminLogin, adminLogOut } from "./src/controller/authController.js";
 import { isAdmin } from "./src/middleware/isAdmin.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import {
+  addPokemon,
+  deletePokemon,
+  getAllPokemon,
+  updatePokemon,
+} from "./src/controller/pokemonController.js";
+import bodyParser from "body-parser";
 
 const app = express();
 const router = express.Router();
@@ -37,6 +44,11 @@ router.get("/adminDashboard", isAdmin, (req, res) => {
 });
 router.post("/adminLogin", adminLogin); // Corrected route
 router.post("/adminLogout", adminLogOut);
+
+router.post("/addPokemon", isAdmin, addPokemon);
+router.delete("/deletePokemon/:id", isAdmin, deletePokemon);
+router.get("/getAllPokemon", isAdmin, getAllPokemon);
+router.put("/updatePokemon/:id", isAdmin, updatePokemon);
 
 // Use Router (After defining routes)
 app.use(router);
