@@ -19,20 +19,10 @@ const router = express.Router();
 // Middleware
 app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
-const allowedOrigins = [
-  "https://lise-infotech-task-1mf7.vercel.app",
-  // Add other allowed origins here
-];
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-        callback(null, origin);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: "https://lise-infotech-task-1mf7.vercel.app",
     credentials: true,
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
