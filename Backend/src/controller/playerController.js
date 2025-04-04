@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Player } from "../model/PlayerModel";
+import PlayerModel from "../model/PlayerModel.js"; 
 
 export const playerRegister = async (req, res) => {
   try {
@@ -12,24 +12,18 @@ export const playerRegister = async (req, res) => {
         .json({ message: "Invalid input or password too short" });
     }
 
-    const existingPlayer = await Player.findOne({
-      $or: [{ email }, { username }],
-    });
+    const existingPlayer = await PlayerModel.findOne({ $or: [{ email }, { username }] });
     if (existingPlayer) {
-      return res
-        .status(400)
-        .json({ message: "Username or email already exists" });
+      return res.status(400).json({ message: "Username or email already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newPlayer = new Player({ username, email, password: hashedPassword });
+    const newPlayer = new PlayerModel({ username, email, password: hashedPassword });
 
     await newPlayer.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error registering user", error: err.message });
+    res.status(500).json({ message: "Error registering user", error: err.message });
   }
 };
 
@@ -41,15 +35,13 @@ export const playerLogin = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    const player = await Player.findOne({ $or: [{ username }, { email }] });
+    const player = await PlayerModel.findOne({ $or: [{ username }, { email }] });
     if (!player) return res.status(400).json({ message: "User not found" });
 
     const isMatch = await bcrypt.compare(password, player.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid password" });
 
-    const token = jwt.sign({ playerId: player._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ playerId: player._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.json({ message: "Login successful", token });
   } catch (err) {
