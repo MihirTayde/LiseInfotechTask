@@ -1,58 +1,54 @@
 import express from "express";
 import configDB from "./src/config/configDB.js";
 import "dotenv/config";
-import { adminLogin, adminLogOut } from "./src/controller/authController.js";
-import { isAdmin } from "./src/middleware/isAdmin.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
+
+import { adminLogin, adminLogOut } from "./src/controller/authController.js";
+import { isAdmin } from "./src/middleware/isAdmin.js";
 import {
   addPokemon,
   deletePokemon,
   getAllPokemon,
   updatePokemon,
 } from "./src/controller/pokemonController.js";
-import bodyParser from "body-parser";
 
 const app = express();
 const router = express.Router();
 
-// Middleware
-app.use(express.json()); // Important for parsing JSON requests
-app.use(cookieParser());
-app.use(bodyParser)
+// Apply CORS before defining routes
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app",
-    credentials: true,
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
+    origin: "https://lise-infotech-task-1mf7.vercel.app", // Allow frontend origin
+    credentials: true, // Allow cookies and authentication headers
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// Handle preflight requests (important)
+app.options("*", cors());
+
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
+app.use(bodyParser.json()); // Ensure body parsing
+
+// Debugging: Log request headers
 app.use((req, res, next) => {
   console.log("Request Headers:", req.headers);
   next();
 });
 
-app.options("*", cors()); // Handle preflight requests globally
-
 // Database Connection
 configDB();
 
-// Root Route (You can keep this or remove it if not needed)
-app.get("/", (req, res) => {
-  try {
-    res.send("Hi there");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-// Admin Routes
+// Routes
 router.get("/adminDashboard", isAdmin, (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
-router.post("/adminLogin", adminLogin); // Corrected route
+router.post("/adminLogin", adminLogin);
 router.post("/adminLogout", adminLogOut);
 
 router.post("/addPokemon", isAdmin, addPokemon);
@@ -60,7 +56,7 @@ router.delete("/deletePokemon/:id", isAdmin, deletePokemon);
 router.get("/getAllPokemon", isAdmin, getAllPokemon);
 router.put("/updatePokemon/:id", isAdmin, updatePokemon);
 
-// Use Router (After defining routes)
+// Use Router
 app.use(router);
 
 // Start Server

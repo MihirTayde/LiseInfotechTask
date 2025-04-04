@@ -1,4 +1,5 @@
-import Pokemon from "../models/pokemonModel.js";
+
+
 
 // ✅ Add a new Pokémon
 export const addPokemon = async (req, res) => {
