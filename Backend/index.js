@@ -14,21 +14,28 @@ app.use(express.json()); // Important for parsing JSON requests
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://lise-infotech-task-1mf7.vercel.app",
-    credentials: true,
+    origin: "https://lise-infotech-task-1mf7.vercel.app", // Correct origin (no trailing slash)
+    credentials: true, // Allow credentials like cookies
   })
 );
 
 // Database Connection
 configDB();
 
-
+// Root Route (You can keep this or remove it if not needed)
+app.get("/", (req, res) => {
+  try {
+    res.send("Hi there");
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // Admin Routes
 router.get("/adminDashboard", isAdmin, (req, res) => {
   res.json({ message: "Welcome to Admin Dashboard" });
 });
-router.post("/", adminLogin);
+router.post("/adminLogin", adminLogin); // Corrected route
 router.post("/adminLogout", adminLogOut);
 
 // Pokémon Data Storage (Temporary - Replace with Database)

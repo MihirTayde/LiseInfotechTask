@@ -13,7 +13,7 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await axios.post(
-        "https://lise-infotech-task.vercel.app/",
+        "https://lise-infotech-task.vercel.app/adminLogin", // Corrected login endpoint
         {
           userName,
           password,
