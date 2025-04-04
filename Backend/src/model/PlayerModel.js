@@ -6,4 +6,4 @@ const playerSchema = new mongoose.Schema({
     password: { type: String, required: true, minlength: 6 },
   });
   
-  const User = mongoose.model("Player", playerSchema);
+  export const Player = mongoose.model("Player", playerSchema);
