@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./styles.css";
 
-const API_BASE_URL = "https://liseinfotechtask-2.onrender.com/isAdmin";
+const API_BASE_URL = "https://liseinfotechtask-2.onrender.com/adminLogin";
 
 const AdminDashboard = () => {
   const [pokemons, setPokemons] = useState([]);
